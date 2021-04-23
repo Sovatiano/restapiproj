@@ -1,0 +1,82 @@
+{% if current_user.is_authenticated %}
+    {% extends "logtemplate.html" %}
+{% else %}
+	{% extends "teamplate.html" %}
+{% endif %}
+
+{% block content %}
+<h1>Личный Кабинет</h1>
+<h2>У вас арендовано {{ meters }} квадратных метров. Ваша арендная плата составляет {{ payment }}$ в месяц</h2>
+<h2>Хотите изменить размер своего склада?</h2>
+<form action="" method="post">
+	{{ form.csrf_token }}
+    <p>
+        {{ form.value.label }}<br>
+        {{ form.value(class="form-control") }}<br>
+        {% for error in form.value.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+    </p>
+    <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+</form>
+<h2>Содержимое вашего скалада</h2>
+<div class="table-wrapper-scroll-y my-custom-scrollbar">
+	<table class="table table-bordered">
+	  <thead>
+		<tr>
+		  <th scope="col">#</th>
+		  <th scope="col">Наименование</th>
+		  <th scope="col">Вес</th>
+		  <th scope="col">Описание</th>
+		  <th scope="col">Дата добавления</th>
+		</tr>
+	  </thead>
+	  <tbody>
+		{% for item in items%}
+		<tr>
+		  <th scope="row">1</th>
+		  <td>{{ item.name }}</td>
+		  <td>{{ item.weight }}</td>
+		  <td>{{ item.about }}</td>
+		  <td>{{ item.add_date }}</td>
+		</tr>
+		{% endfor %}
+	  </tbody>
+	</table>
+</div>
+
+<h2>Хотите добавить предмет на склад?</h2>
+<form action="" method="post">
+	{{ form2.csrf_token }}
+    <p>
+        {{ form2.name.label }}<br>
+        {{ form2.name(class="form-control") }}<br>
+        {% for error in form2.name.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+    </p>
+	    <p>
+        {{ form2.weight.label }}<br>
+        {{ form2.weight(class="form-control") }}<br>
+        {% for error in form2.weight.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+    </p>
+	    <p>
+        {{ form2.about.label }}<br>
+        {{ form2.about(class="form-control") }}<br>
+        {% for error in form2.about.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+    </p>
+    <p>{{ form2.submit(type="submit", class="btn btn-primary") }}</p>
+</form>
+{% endblock %}
