@@ -22,11 +22,15 @@ class RegisterForm(FlaskForm):
 
 class ChangeForm(FlaskForm):
     value = StringField('Введите новое значение', validators=[DataRequired()])
-    submit = SubmitField('Изменить')
+    submit1 = SubmitField('Изменить')
 
 
 class ItemsForm(FlaskForm):
     name = StringField('Введите название предмета', validators=[DataRequired()])
     weight = StringField('Введите вес предмета', validators=[DataRequired()])
     about = TextAreaField("Введите краткое описание*")
-    submit = SubmitField('Изменить')
+    submit2 = SubmitField('Добавить')
+
+class ItemsDelForm(FlaskForm):
+    id = StringField('Введите id предмета, который хотите удалить из таблицы выше', validators=[DataRequired()])
+    submit3 = SubmitField('Удалить')

@@ -2,12 +2,13 @@ from flask import Flask, redirect, render_template
 from data import users, rentarea, Items, db_session
 import datetime
 from flask_login import LoginManager, login_user, current_user, logout_user, login_required
-from Forms import LoginForm, RegisterForm, ItemsForm, ChangeForm
-
+from Forms import LoginForm, RegisterForm, ItemsForm, ChangeForm, ItemsDelForm
+from sqlalchemy import delete
 
 User = users.User
 UserData = rentarea.RentArea
 Items = Items.Items
+ItemsDel = ItemsDelForm
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -29,7 +30,24 @@ def load_user(user_id):
 
 @app.route('/index')
 def ind():
-    return render_template('index.html')
+    summweight = 0
+    summsqmeters = 0
+    cliennumber = 0
+    sklonenie = ""
+    db_sess = db_session.create_session()
+    items = db_sess.query(Items).filter(Items.id > 0)
+    clients = db_sess.query(UserData).filter(UserData.id > 0)
+    for j in items:
+        summweight += j.weight
+    for j in clients:
+        summsqmeters += j.sqmeters
+        cliennumber += 1
+    if 1 < cliennumber < 5:
+        sklonenie = "человека"
+    else:
+        sklonenie = "человек"
+    return render_template('index.html', weight=summweight, sqmeters=summsqmeters, clients=cliennumber,
+                           okonch=sklonenie)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -92,17 +110,18 @@ def logout():
 def cabinet():
     form = ChangeForm()
     form2 = ItemsForm()
+    form3 = ItemsDelForm()
     meters = 0
     payment = 0
     db_sess = db_session.create_session()
     CurrentUserData = db_sess.query(UserData).filter(UserData.user_id == current_user.id).first()
     CurrentItems = db_sess.query(Items).filter(Items.user_id == current_user.id)
-    if form.validate_on_submit():
+    if form.submit1.data and form.validate():
         if form.value.data.isdigit() and int(form.value.data) >= 0:
             CurrentUserData.sqmeters = int(form.value.data)
             CurrentUserData.update_date = datetime.datetime.now()
             db_sess.commit()
-    if form2.validate_on_submit():
+    if form2.submit2.data and form2.validate():
         if form2.weight.data.isdigit() and int(form2.weight.data) > 0:
             NewItem = Items(
                 user_id=current_user.id,
@@ -114,10 +133,15 @@ def cabinet():
 
             db_sess.add(NewItem)
             db_sess.commit()
+    if form3.submit3.data and form3.validate():
+        DeletedItem = db_sess.query(Items).filter(Items.id == form3.id.data).first()
+        db_sess.delete(DeletedItem)
+        db_sess.commit()
     if CurrentUserData:
         meters = CurrentUserData.sqmeters
         payment = meters * 3
-    return render_template('cabinet.html', meters=meters, form=form, payment=payment, items=CurrentItems, form2=form2)
+    return render_template('cabinet.html', meters=meters, form=form, payment=payment, items=CurrentItems, form2=form2,
+                           form3=form3)
 
 
 if __name__ == '__main__':

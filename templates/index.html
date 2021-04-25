@@ -1,8 +1,8 @@
 {% if current_user.is_authenticated %}
-	<title>Hello, Jhonny!</title>
+	<title>HelloWorldStorage</title>
     {% extends "logtemplate.html" %}
 {% else %}
-	<title>Hello, world!</title>
+	<title>HelloWorldStorage</title>
 	{% extends "teamplate.html" %}
 {% endif %}
 
@@ -44,5 +44,12 @@
     <span class="carousel-control-next-icon" aria-hidden="true"></span>
     <span class="visually-hidden">Next</span>
   </button>
+</div>
+<div style="background-color:white; padding:10px;">
+<h1>Сотрудничество с HelloWorldStorage означает надёжность и безопасность</h1>
+<h2><strong>Ниже приведена небольшая статистика склада HelloWorldStorage</strong></h2>
+<h3><u>В данный момент услугами HelloWorldStorage пользуется {{ clients }} {{ okonch}}</u></h3>
+<h3><u>На складе HelloWorldStorage в данный момент арендуется {{ sqmeters }} квадратных метров</u></h3>
+<h3><u>Общий вес хранящихся на складе HelloWorldStorage предметов составляет {{ weight }} килограмм</u></h3>
 </div>
 {% endblock %}

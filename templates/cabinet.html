@@ -3,8 +3,10 @@
 {% else %}
 	{% extends "teamplate.html" %}
 {% endif %}
+<title>Личный Кабинет</title>
 
 {% block content %}
+<div style="background-color:white; padding:10px;">
 <h1>Личный Кабинет</h1>
 <h2>У вас арендовано {{ meters }} квадратных метров. Ваша арендная плата составляет {{ payment }}$ в месяц</h2>
 <h2>Хотите изменить размер своего склада?</h2>
@@ -19,14 +21,14 @@
             </p>
         {% endfor %}
     </p>
-    <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+    <p>{{ form.submit1(type="submit", class="btn btn-primary") }}</p>
 </form>
-<h2>Содержимое вашего скалада</h2>
+<h2>Содержимое вашего склада</h2>
 <div class="table-wrapper-scroll-y my-custom-scrollbar">
 	<table class="table table-bordered">
 	  <thead>
 		<tr>
-		  <th scope="col">#</th>
+		  <th scope="col">id</th>
 		  <th scope="col">Наименование</th>
 		  <th scope="col">Вес</th>
 		  <th scope="col">Описание</th>
@@ -36,7 +38,7 @@
 	  <tbody>
 		{% for item in items%}
 		<tr>
-		  <th scope="row">1</th>
+		  <th scope="row">{{ item.id }}</th>
 		  <td>{{ item.name }}</td>
 		  <td>{{ item.weight }}</td>
 		  <td>{{ item.about }}</td>
@@ -77,6 +79,21 @@
             </p>
         {% endfor %}
     </p>
-    <p>{{ form2.submit(type="submit", class="btn btn-primary") }}</p>
+    <p>{{ form2.submit2(type="submit", class="btn btn-primary") }}</p>
 </form>
+<h2>Хотите удалить предмет со склада?</h2>
+<form action="" method="post">
+	{{ form3.csrf_token }}
+    <p>
+        {{ form3.id.label }}<br>
+        {{ form3.id(class="form-control") }}<br>
+        {% for error in form3.id.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+    </p>
+    <p>{{ form3.submit3(type="submit", class="btn btn-primary") }}</p>
+</form>
+</div>
 {% endblock %}
