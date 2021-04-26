@@ -27,6 +27,27 @@ def load_user(user_id):
     db_sess = db_session.create_session()
     return db_sess.query(User).get(user_id)
 
+@app.route('/')
+def main():
+    summweight = 0
+    summsqmeters = 0
+    cliennumber = 0
+    sklonenie = ""
+    db_sess = db_session.create_session()
+    items = db_sess.query(Items).filter(Items.id > 0)
+    clients = db_sess.query(UserData).filter(UserData.id > 0)
+    for j in items:
+        summweight += j.weight
+    for j in clients:
+        summsqmeters += j.sqmeters
+        cliennumber += 1
+    if 1 < cliennumber < 5:
+        sklonenie = "человека"
+    else:
+        sklonenie = "человек"
+    return render_template('index.html', weight=summweight, sqmeters=summsqmeters, clients=cliennumber,
+                           okonch=sklonenie)
+
 
 @app.route('/index')
 def ind():
@@ -146,4 +167,4 @@ def cabinet():
 
 if __name__ == '__main__':
     main()
-    app.run(port=8080, host='127.0.0.1')
+    app.run(port=5000, host='127.0.0.1')
