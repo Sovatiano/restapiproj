@@ -28,11 +28,10 @@ def load_user(user_id):
     return db_sess.query(User).get(user_id)
 
 @app.route('/')
-def main():
+def mains():
     summweight = 0
     summsqmeters = 0
     cliennumber = 0
-    sklonenie = ""
     db_sess = db_session.create_session()
     items = db_sess.query(Items).filter(Items.id > 0)
     clients = db_sess.query(UserData).filter(UserData.id > 0)
@@ -54,7 +53,6 @@ def ind():
     summweight = 0
     summsqmeters = 0
     cliennumber = 0
-    sklonenie = ""
     db_sess = db_session.create_session()
     items = db_sess.query(Items).filter(Items.id > 0)
     clients = db_sess.query(UserData).filter(UserData.id > 0)
