@@ -1,1 +1,6 @@
 Flask
+sqlalchemy
+datetime
+flask_login
+wtforms
+flask_wtf
